@@ -14,6 +14,10 @@ let sketch = (()=>{
 		background(mouseX/width * 255, 0, 50);
 	}
 
+	mousePressed = ()=>{
+		window.navigator.vibrate([200]);
+	}
+
 
 });
 
@@ -21,5 +25,4 @@ function initClient(){
     let myp5 = new p5(sketch);
     var input = document.getElementById("input");
 	input.remove();
-	window.navigator.vibrate([200]);
 }
