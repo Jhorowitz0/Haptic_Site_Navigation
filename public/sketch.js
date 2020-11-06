@@ -67,7 +67,7 @@ class Element{
 var page = null;
 var displayText = 'text';
 var address = [];
-var dragDistance = 20;
+var dragDistance = 35;
 var initialTouch = {
 	x:0,
 	y:0
@@ -128,11 +128,13 @@ let sketch = (()=>{
 			initialTouch.x = mouseX;
 			address.push(0);
 			if(page.getType(address) == 'error') address.pop();
+			else window.navigator.vibrate([10]);
 		}
 		else if(newTouch.y < -1 * dragDistance){
 			initialTouch.y = mouseY;
 			initialTouch.x = mouseX;
 			address.pop();
+			window.navigator.vibrate([10]);
 		}
 
 		newTouch.x = mouseX - initialTouch.x;
@@ -142,6 +144,7 @@ let sketch = (()=>{
 
 			let newVal = (address[address.length-1] - 1);
 			if(newVal < 0) newVal = 0;
+			window.navigator.vibrate([10]);
 			address[address.length-1] = newVal;
 		}
 		else if(newTouch.x < -1 * dragDistance){
@@ -151,6 +154,7 @@ let sketch = (()=>{
 			let newVal = (address[address.length-1] + 1);
 			if(newVal > page.getLength(address)-1) newVal = page.getLength(address)-1;
 			address[address.length-1] = newVal;
+			window.navigator.vibrate([10]);
 		}
 	}
 
