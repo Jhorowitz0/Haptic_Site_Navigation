@@ -136,7 +136,7 @@ let sketch = (()=>{
 		}
 
 		newTouch.x = mouseX - initialTouch.x;
-		if(newTouch.x < -1 * dragDistance){
+		if(newTouch.x > dragDistance){
 			initialTouch.x = mouseX;
 			initialTouch.y = mouseY;
 
@@ -144,7 +144,7 @@ let sketch = (()=>{
 			if(newVal < 0) newVal = 0;
 			address[address.length-1] = newVal;
 		}
-		else if(newTouch.x > dragDistance){
+		else if(newTouch.x < -1 * dragDistance){
 			initialTouch.x = mouseX;
 			initialTouch.y = mouseY;
 
