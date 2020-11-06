@@ -67,6 +67,15 @@ class Element{
 var page = null;
 var displayText = 'text';
 var address = [];
+var dragDistance = 50;
+var initialTouch = {
+	x:0,
+	y:0
+}
+var newTouch = {
+	x:0,
+	y:0
+}
 
 function setup() {
 	page = new Element('body');
@@ -109,14 +118,45 @@ let sketch = (()=>{
 		fill(255);
 		textSize(32);
 
-		// text(address, 100, 100);
 		// text(displayText, width/2, height/2);
 	}
 
 	mouseDragged = ()=>{
+		newTouch.y = mouseY - initialTouch.y;
+		if(newTouch.y < -1 * dragDistance){
+			initialTouch.y = mouseY;
+			initialTouch.x = mouseX;
+			address.push(0);
+			if(page.getType(address) == 'error') address.pop();
+		}
+		else if(newTouch.y > dragDistance){
+			initialTouch.y = mouseY;
+			initialTouch.x = mouseX;
+			address.pop();
+		}
+
+		newTouch.x = mouseX - initialTouch.x;
+		if(newTouch.x < -1 * dragDistance){
+			initialTouch.x = mouseX;
+			initialTouch.y = mouseY;
+
+			let newVal = (address[address.length-1] - 1);
+			if(newVal < 0) newVal = 0;
+			address[address.length-1] = newVal;
+		}
+		else if(newTouch.x > dragDistance){
+			initialTouch.x = mouseX;
+			initialTouch.y = mouseY;
+
+			let newVal = (address[address.length-1] + 1);
+			if(newVal > page.getLength(address)-1) newVal = page.getLength(address)-1;
+			address[address.length-1] = newVal;
+		}
 	}
 
 	mousePressed = ()=>{
+		initialTouch.y = mouseY;
+		initialTouch.x = mouseX;
 	}
 
 	keyPressed = ()=>{
