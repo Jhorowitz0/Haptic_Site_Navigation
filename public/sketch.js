@@ -67,7 +67,7 @@ class Element{
 var page = null;
 var displayText = 'text';
 var address = [];
-var dragDistance = 50;
+var dragDistance = 20;
 var initialTouch = {
 	x:0,
 	y:0
@@ -123,13 +123,13 @@ let sketch = (()=>{
 
 	mouseDragged = ()=>{
 		newTouch.y = mouseY - initialTouch.y;
-		if(newTouch.y < -1 * dragDistance){
+		if(newTouch.y > dragDistance){
 			initialTouch.y = mouseY;
 			initialTouch.x = mouseX;
 			address.push(0);
 			if(page.getType(address) == 'error') address.pop();
 		}
-		else if(newTouch.y > dragDistance){
+		else if(newTouch.y < -1 * dragDistance){
 			initialTouch.y = mouseY;
 			initialTouch.x = mouseX;
 			address.pop();
