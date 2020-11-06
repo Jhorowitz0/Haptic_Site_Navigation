@@ -20,25 +20,43 @@ class Element{
 		}
 	}
 
+	getLength(address){
+		if(address.length <= 1) return this.children.length;
+		else{
+			let a = [...address];
+			let i = a.shift();
+			if(i >= this.children.length || i < 0) return 'error';
+			return this.children[i].getLength(a);
+		}
+	}
+
 	draw(address){
+		fill(50);
+		text(this.type,0,0);
 		if(address.length < 1){
-			fill(255,0,0);
-			ellipse(0,0,20,20);
+			fill(255);
+			text(this.type,0,0);
 			push();
 			translate(0,-100);
-			fill(50,0,0);
-			for(let j = 0; j < this.children.length; j++) ellipse(j*100,0,10,10);
+			fill(50);
+			for(let j = 0; j < this.children.length; j++){
+				// ellipse(j*100,0,10,10);
+				text(this.children[j].type,j*100,0);
+			}
 			pop();
 		}
 		else{
 			push();
 			translate(0,-100);
-			fill(50,0,0);
+			fill(50);
 			let a = [...address];
 			let i = a.shift();
 			if(i >= this.children.length || i < 0) console.log('error');
 			else{
-				for(let j = 0; j < this.children.length; j++) ellipse(((this.children.length-1-i)-j)*100,0,10,10);
+				for(let j = 0; j < this.children.length; j++){
+					// ellipse(((this.children.length-1-i)-j)*100,0,10,10);
+					text(this.children[this.children.length - j - 1].type,((this.children.length-1-i)-j)*100,0);
+				}
 				this.children[i].draw(a);
 			}
 			pop();
@@ -48,22 +66,33 @@ class Element{
 
 var page = null;
 var displayText = 'text';
-var address = [0];
+var address = [];
 
 function setup() {
 	page = new Element('body');
-	let elem = new Element('div');
+	let elem = new Element('header');
+	let nav = new Element('nav');
+	let list = new Element('ul');
+	list.addChild(new Element('li'));
+	list.addChild(new Element('li'));
+	list.addChild(new Element('li'));
+	list.addChild(new Element('li'));
+	nav.addChild(list)
+	elem.addChild(nav);
+	page.addChild(elem);
+	elem = new Element('div');
 	elem.addChild(new Element('button'));
 	elem.addChild(new Element('img'));
-	elem.addChild(new Element('p'));
 	page.addChild(elem);
 	elem = new Element('section');
 	elem.addChild(new Element('h1'));
 	elem.addChild(new Element('h2'));
+	elem.addChild(list);
 	elem.addChild(new Element('p'));
 	page.addChild(elem);
 	createCanvas(windowWidth, windowHeight);
 	textAlign(CENTER);
+	rectMode(CENTER);
 }
 
 
@@ -73,15 +102,15 @@ let sketch = (()=>{
 
 		push();
 		noStroke();
-		translate(width/2,height/2);
+		translate(width/2,height/2 + (100 * address.length));
 		page.draw(address);
 		pop();
 
 		fill(255);
 		textSize(32);
 
-		text(address, 100, 100);
-		text(displayText, width/2, height/2);
+		// text(address, 100, 100);
+		// text(displayText, width/2, height/2);
 	}
 
 	mouseDragged = ()=>{
@@ -93,15 +122,21 @@ let sketch = (()=>{
 	keyPressed = ()=>{
 		if(keyCode == 38 || keyCode == 87){
 			address.push(0);
+			if(page.getType(address) == 'error') address.pop();
 		}
 		if(keyCode == 40 || keyCode == 83){
 			address.pop();
 		}
 		if(keyCode == 37 || keyCode == 65){
-			address[address.length-1] = (address[address.length-1] - 1);
+			let newVal = (address[address.length-1] - 1);
+			if(newVal < 0) newVal = 0;
+			address[address.length-1] = newVal;
+			
 		}
 		if(keyCode == 39 || keyCode == 68){
-			address[address.length-1] = address[address.length-1] + 1;
+			let newVal = (address[address.length-1] + 1);
+			if(newVal > page.getLength(address)-1) newVal = page.getLength(address)-1;
+			address[address.length-1] = newVal;
 		}
 		displayText = page.getType(address);
 	}
