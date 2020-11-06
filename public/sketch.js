@@ -145,7 +145,6 @@ let sketch = (()=>{
 			let newVal = (address[address.length-1] - 1);
 			if(newVal < 0) newVal = 0;
 			else window.navigator.vibrate([10]);
-			window.navigator.vibrate([10]);
 			address[address.length-1] = newVal;
 		}
 		else if(newTouch.x < -1 * dragDistance){
@@ -156,7 +155,6 @@ let sketch = (()=>{
 			if(newVal > page.getLength(address)-1) newVal = page.getLength(address)-1;
 			else window.navigator.vibrate([10]);
 			address[address.length-1] = newVal;
-			window.navigator.vibrate([10]);
 		}
 	}
 
